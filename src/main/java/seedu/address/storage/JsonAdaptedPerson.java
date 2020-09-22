@@ -107,6 +107,7 @@ class JsonAdaptedPerson {
 
         final Remark modelRemark = new Remark(""); //TODO: Implement parsing and marshalling in the storage commit.
 
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelRemark);    }
+        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelRemark);
+    }
 
 }
