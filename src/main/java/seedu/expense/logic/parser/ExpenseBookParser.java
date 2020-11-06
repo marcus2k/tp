@@ -65,64 +65,70 @@ public class ExpenseBookParser {
         }
 
         String commandWord = matcher.group("commandWord");
+        String maybeAlias = commandWord;
         if (aliasMap != null && aliasMap.hasAlias(commandWord)) {
             commandWord = aliasMap.getValue(commandWord);
         }
         final String arguments = matcher.group("arguments");
         LogsCenter.getLogger(LogicManager.class).info(
                 "----------------[USER COMMAND][" + commandWord + " " + arguments + "]");
-        switch (commandWord) {
+        try {
+            switch (commandWord) {
 
-        case AddCommand.COMMAND_WORD:
-            return new AddCommandParser().parse(arguments);
+            case AddCommand.COMMAND_WORD:
+                return new AddCommandParser().parse(arguments);
 
-        case EditCommand.COMMAND_WORD:
-            return new EditCommandParser().parse(arguments);
+            case EditCommand.COMMAND_WORD:
+                return new EditCommandParser().parse(arguments);
 
-        case DeleteCommand.COMMAND_WORD:
-            return new DeleteCommandParser().parse(arguments);
+            case DeleteCommand.COMMAND_WORD:
+                return new DeleteCommandParser().parse(arguments);
 
-        case ClearCommand.COMMAND_WORD:
-            return new ClearCommand();
+            case ClearCommand.COMMAND_WORD:
+                return new ClearCommand();
 
-        case FindCommand.COMMAND_WORD:
-            return new FindCommandParser().parse(arguments);
+            case FindCommand.COMMAND_WORD:
+                return new FindCommandParser().parse(arguments);
 
-        case ListCommand.COMMAND_WORD:
-            return new ListCommand();
+            case ListCommand.COMMAND_WORD:
+                return new ListCommand();
 
-        case ExitCommand.COMMAND_WORD:
-            return new ExitCommand();
+            case ExitCommand.COMMAND_WORD:
+                return new ExitCommand();
 
-        case HelpCommand.COMMAND_WORD:
-            return new HelpCommand();
+            case HelpCommand.COMMAND_WORD:
+                return new HelpCommand();
 
-        case RemarkCommand.COMMAND_WORD:
-            return new RemarkCommandParser().parse(arguments);
+            case RemarkCommand.COMMAND_WORD:
+                return new RemarkCommandParser().parse(arguments);
 
-        case TopupCommand.COMMAND_WORD:
-            return new TopupCommandParser().parse(arguments);
+            case TopupCommand.COMMAND_WORD:
+                return new TopupCommandParser().parse(arguments);
 
-        case AddCategoryCommand.COMMAND_WORD:
-            return new AddCategoryCommandParser().parse(arguments);
+            case AddCategoryCommand.COMMAND_WORD:
+                return new AddCategoryCommandParser().parse(arguments);
 
-        case DeleteCategoryCommand.COMMAND_WORD:
-            return new DeleteCategoryCommandParser().parse(arguments);
+            case DeleteCategoryCommand.COMMAND_WORD:
+                return new DeleteCategoryCommandParser().parse(arguments);
 
-        case SwitchCommand.COMMAND_WORD:
-            return new SwitchCommandParser().parse(arguments);
+            case SwitchCommand.COMMAND_WORD:
+                return new SwitchCommandParser().parse(arguments);
 
-        case AliasCommand.COMMAND_WORD:
-            return new AliasCommandParser().parse(arguments);
+            case AliasCommand.COMMAND_WORD:
+                return new AliasCommandParser().parse(arguments);
 
-        case SortCommand.COMMAND_WORD:
-            return new SortCommandParser().parse(arguments);
+            case SortCommand.COMMAND_WORD:
+                return new SortCommandParser().parse(arguments);
 
-        case ResetAliasCommand.COMMAND_WORD:
-            return new ResetAliasCommandParser().parse(arguments);
+            case ResetAliasCommand.COMMAND_WORD:
+                return new ResetAliasCommandParser().parse(arguments);
 
-        default:
-            throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
+            default:
+                throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
+            }
+        } catch (ParseException e) {
+            String updatedMessage = e.getMessage().replace(commandWord, maybeAlias);
+            throw new ParseException(updatedMessage);
         }
     }
 }
