@@ -21,6 +21,7 @@ import seedu.expense.logic.commands.FindCommand;
 import seedu.expense.logic.commands.HelpCommand;
 import seedu.expense.logic.commands.ListCommand;
 import seedu.expense.logic.commands.RemarkCommand;
+import seedu.expense.logic.commands.ResetAliasCommand;
 import seedu.expense.logic.commands.SortCommand;
 import seedu.expense.logic.commands.SwitchCommand;
 import seedu.expense.logic.commands.TopupCommand;
@@ -36,7 +37,7 @@ public class AliasMap {
     public static final String UNCHANGED_ALIAS = "Previous and updated alias must not be the same.";
     public static final String ALIAS_NOT_FOUND = "The [%s] alias cannot be found.";
     public static final String ALIAS_ALPHABETS_ONLY = "Only case-sensitive alphabets can be used as aliases.";
-    public static final String ALIAS_COMMAND_UNALIASABLE = "`alias` and `reset alias` commands cannot have aliases.";
+    public static final String ALIAS_COMMAND_UNALIASABLE = "`alias` and `resetAlias` commands cannot have aliases.";
     public static final String MESSAGE_OVERRIDE_ALIAS = "Override existing alias instead: %s";
     public static final IntPredicate IS_ALPHABET_ASCII = x -> (x > 96 && x < 123 || x > 64 && x < 91);
     public static final Set<String> RESERVED_KEYWORDS = Set.of(
@@ -44,7 +45,8 @@ public class AliasMap {
             EditCommand.COMMAND_WORD, ExitCommand.COMMAND_WORD, FindCommand.COMMAND_WORD,
             HelpCommand.COMMAND_WORD, ListCommand.COMMAND_WORD, RemarkCommand.COMMAND_WORD,
             TopupCommand.COMMAND_WORD, AliasCommand.COMMAND_WORD, AddCategoryCommand.COMMAND_WORD,
-            DeleteCategoryCommand.COMMAND_WORD, SwitchCommand.COMMAND_WORD, SortCommand.COMMAND_WORD
+            DeleteCategoryCommand.COMMAND_WORD, SwitchCommand.COMMAND_WORD, SortCommand.COMMAND_WORD,
+            ResetAliasCommand.COMMAND_WORD
     );
 
     // Maps String alias to String default_command
@@ -134,7 +136,8 @@ public class AliasMap {
         requireNonNull(prev);
         requireNonNull(update);
         assert (prev.getValue().equals(update.getValue())) : "Must replace the same value (command) alias";
-        if (prev.getKey().equals(AliasCommand.COMMAND_WORD)) {
+        if (prev.getKey().equals(AliasCommand.COMMAND_WORD)
+                || prev.getKey().equals(ResetAliasCommand.COMMAND_WORD)) {
             throw new IllegalArgumentException(ALIAS_COMMAND_UNALIASABLE);
         }
         if (!update.getKey().chars().allMatch(IS_ALPHABET_ASCII)) {
