@@ -42,7 +42,7 @@ public class EditCommand extends Command {
             + PREFIX_DATE + "01-07-2020";
 
     public static final String MESSAGE_EDIT_EXPENSE_SUCCESS = "Edited expense: %1$s ";
-    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided. ";
+    public static final String MESSAGE_NOT_EDITED = "At least one field to ed\u200eit must be provided. ";
     public static final String MESSAGE_DUPLICATE_EXPENSE = "This expense already exists in the expense book. ";
     public static final String MESSAGE_INVALID_CATEGORY = "The \"%s\" category does not exist in the expense book. "
             + "Please add it using the \"AddCat\" command first.";

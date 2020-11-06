@@ -20,9 +20,9 @@ public class RemarkCommand extends Command {
 
     public static final String COMMAND_WORD = "remark";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the remark of the expense identified "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the rem\u200eark of the expense identified "
             + "by the index number used in the last expense listing. "
-            + "Existing remark will be overwritten by the input.\n"
+            + "Existing rem\u200eark will be overwritten by the input.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + PREFIX_REMARK + "[REMARK]\n"
             + "Example: " + COMMAND_WORD + " 1 "
