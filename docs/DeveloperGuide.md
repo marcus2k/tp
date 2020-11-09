@@ -206,24 +206,27 @@ The expense sorting command is facilitated by `UniqueExpenseList` and `ExpenseBo
 , a new `Command` subclass, `SortCommand`, is required.   Specifically, the following operations are relevant to this
  command:
 
-* `ExpenseBook#sort(Comparator<Expense> comparator)` — Sorts its `UniqueExpenseList` according to the comparator
+* `ExpenseBook#sortExpenses(Comparator<Expense> comparator)` — Sorts its `UniqueExpenseList` according to the comparator
  provided.
-* `UniqueExpenseList#sort(Comparator<Expense> comparator)` — Sorts its `ObservableList<Expense>` according to the
+* `UniqueExpenseList#sortExpenses(Comparator<Expense> comparator)` — Sorts its `ObservableList<Expense>` according to the
  comparator provided.
 
-These operations are exposed in the `Model` interface as `Model#sortExpenses(Comparator<Expense> comparator)`
+These operations are exposed in the `Model` interface as `Model#sortExpenseList(Comparator<Expense> comparator)`
 
 ##### `SortCommand` and `SortCommandParser`
 
 `SortCommand` will take in at least one, and up to three keywords which specify the order and the parameters to sort
- by (date, description, amount). The conversion of the `String` input to a `Comparator<Expense>` is facilitated by
+ by (date, description, amount). The conversion of the `String` input to a `SortKeyComparator`, which implements `Comparator<Expense>`, is facilitated by
   `SortCommandParser#parse()`, and the **order** of the sorting parameters is implemented via the `Comparator#thenComparing()` method.
 
+The concrete implementation of the `#Compare(Expense other)` method is present in subclasses of `SortKeyComparator`: `AmountComparator`, `DateComparator`, and `DescriptionComparator`.
+These are the methods that are called when combining `SortKeyComparators` through the `Comparator#thenComparing()` method.
+
 Command Example:
-* `sort by/date` — Sorted by chronological order.
-* `sort by/date by/descriptionR` — Sorted in chronological order, then based on reverse alphabetical
+* `sort -by date` — Sorted by chronological order.
+* `sort -by date -by descriptionR` — Sorted in chronological order, then based on reverse alphabetical
  order of descriptions.
-* `sort by/date by/amount by/description` — Sorted in following order of priority: Chronological order, then by
+* `sort -by date -by amount -by description` — Sorted in following order of priority: Chronological order, then by
  increasing order of amounts, then by alphabetical order of descriptions.
 
 ##### Example Usage
@@ -234,7 +237,7 @@ Step 1. The user launches the application. The `ExpenseBook` shows the list of e
 Step 2. The user executes `sort by/date by/descriptionR` command to sort the `Expenses` in `ExpenseBook` first by
  date, then in reverse alphabetical order of the descriptions.
  A comparator is created reflecting the above sorting.
- The `sort` command calls `Model#sort(Comparator<Expense> c)`, causing the `ExpenseBook` expenses to be
+ The `sort` command calls `Model#sortExpenseList(Comparator<Expense> c)`, causing the `ExpenseBook` expenses to be
   sorted according to the comparator, and the `filteredExpenses` in `Model` to be modified since it is a listener.
 
 The following sequence diagrams shows how the sort command works:
@@ -804,29 +807,70 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
-
 ### Deleting an expense
 
 1. Deleting an expense while all expenses are being shown
 
-   1. Prerequisites: List all expenses using the `list` command. Multiple expenses in the list.
+   1. Prerequisites: List all expenses using the `list` command. At least 1 expense in the list.
 
    1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+      Expected: First expense is deleted from the list. Details of the deleted expense shown in the command box with a uscess.
 
    1. Test case: `delete 0`<br>
-      Expected: No expense is deleted. Error details shown in the status message. Status bar remains the same.
+      Expected: No expense is deleted. Error details shown in the command box. 
 
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
+### Adding an expense
+
+1. Adding an expense while Expense Book is empty. 
+
+    1. Prerequisites: List all expenses using `list` command. Expense Book is empty.
+    
+    1. Test case: `add -d lunch -$10`<br>
+       Expected: An Expense with the description "lunch", costing $10, with the date set as the present date, is added to the expense book. A success message detailing this is shown in the command box.
+       
+    1. Test case: `add -d lunch -$10 -@27/09/2020`<br>
+       Expected: An Expense with the description "lunch", costing $10, occuring on 27th September 2020 is added to the expense book. A success message detailing this is shown in the command box.
+    
+    1. Test cases: `add -d lunch`<br>
+       Expected: No expense is added. Error details shown in the command box.
+
+1. Adding an expense while Expense Book has some expenses
+    
+    1. Prerequisites: List all expenses using `list` command. Expense Book has at least 1 entry.
+    
+    1. Test case: Add an expense with the same description, amount and date as an existing expense in the expense book.<br>
+       Expected: No expense is added. Error details shown in the command box.
+
+### Topup budget
+
+1. Topping up budget without a category specified
+
+    1. Test case: `topup -$-10`<br>
+    Expected: Budget is not topped up. Error message shown in command box because of negative value provided.
+    
+    1. Test case: `topup -$10`<br>
+    Expected: "Default" category budget is topped up by $10. A success message detailing this is shown in the command box.
+    
+1. Topping up budget with a category specified
+
+    1. Test case: `topup -$10 t/Food` ("Food" category exists)<br>
+    Expected: "Food" category budget is topped up by $10. A success message detailing this is shown in the command box.
+    
+    1. Test case: `topup -$10 t/Transport` ("Transport" category does not exist yet)<br>
+    Expected: No budget is topped up. Error message shown in command box because the "Transport" category does not exist. 
 
 ### Saving data
 
-1. Dealing with missing/corrupted data files
+1. Saving data automatically after every command
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. Prerequisites: At least one expense is in the expense book.
+   
+   1. Add an expense: `add -d test -$10`
+   
+   1. Test case: Close the app, then start it up again. <br>
+      Expected: the expense book should be the same as when the app was closed. 
 
-1. _{ more test cases …​ }_
+
