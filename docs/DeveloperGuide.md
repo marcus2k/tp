@@ -709,21 +709,6 @@ Similar to U9, except it's the opposite.
     * 1a1. Bamboo shows an error message.
 
       Use case ends.
-      
-#### Use case U15: Graph Command Keyword
-**MSS**
-
-1. User requests to view graph of his personal finance.
-2. Bamboo displays a pop-up window containing a pie chart showing amount spent for each category.
-
-   Use case ends.
-
-**Extensions**
-
-* 1a. User has not recorded any expenditures into the app.
-    * 1a1. Bamboo shows a blank pop-up window.
-
-      Use case ends.
 
 #### Use case U14: Reduce Category Budget
 **MSS**
@@ -754,6 +739,21 @@ Similar to U9, except it's the opposite.
 
       Use case resumes from 4.
 
+#### Use case U15: Graph Command Keyword
+**MSS**
+
+1. User requests to view graph of his personal finance.
+2. Bamboo displays a pop-up window containing a pie chart showing amount spent for each category.
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. User has not recorded any expenditures into the app.
+    * 1a1. Bamboo shows a blank pop-up window.
+
+      Use case ends.
+      
 ### Non-Functional Requirement
 
 Project Constraints:
