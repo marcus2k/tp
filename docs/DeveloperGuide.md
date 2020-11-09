@@ -13,6 +13,8 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div style="page-break-after: always;"></div>
+
 ## **Design**
 
 ### Architecture
@@ -30,6 +32,8 @@ The ***Architecture Diagram*** given above explains the high-level design of the
 **`Main`** has two classes called [`Main`](https://github.com/AY2021S1-CS2103-W14-3/tp/tree/master/src/main/java/seedu/expense/Main.java) and [`MainApp`](https://github.com/AY2021S1-CS2103-W14-3/tp/tree/master/src/main/java/seedu/expense/MainApp.java). It is responsible for,
 * At app launch: Initializes the components in the correct sequence, and connects them up with each other.
 * At shut down: Shuts down the components and invokes cleanup methods where necessary.
+
+<div style="page-break-after: always;"></div>
 
 [**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
 
@@ -49,6 +53,8 @@ For example, the `Logic` component (see the class diagram given below) defines i
 
 ![Class Diagram of the Logic Component](images/LogicClassDiagram.png)
 
+<div style="page-break-after: always;"></div>
+
 **How the architecture components interact with each other**
 
 The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
@@ -56,6 +62,8 @@ The *Sequence Diagram* below shows how the components interact with each other f
 <img src="images/ArchitectureSequenceDiagram.png" width="574" />
 
 The sections below give more details of each component.
+
+<div style="page-break-after: always;"></div>
 
 ### UI component
 
@@ -72,6 +80,8 @@ The `UI` component,
 
 * Executes user commands using the `Logic` component.
 * Listens for changes to `Model` data so that the UI can be updated with the modified data.
+
+<div style="page-break-after: always;"></div>
 
 ### Logic component
 
@@ -93,6 +103,8 @@ Given below is the Sequence Diagram for interactions within the `Logic` componen
 <div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
 </div>
 
+<div style="page-break-after: always;"></div>
+
 ### Model component
 
 ![Structure of the Model Component](images/ModelClassDiagram.png)
@@ -106,12 +118,14 @@ The `Model`,
 * exposes an unmodifiable `ObservableList<Expense>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * does not depend on any of the other three components.
 
+<div style="page-break-after: always;"></div>
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `ExpenseBook`, which `Expense` references. This allows `ExpenseBook` to only require one `Tag` object per unique `Tag`, instead of each `Expense` needing their own `Tag` object.<br>
 ![BetterModelClassDiagram](images/BetterModelClassDiagram.png)
 
 </div>
 
+<div style="page-break-after: always;"></div>
 
 ### Storage component
 
@@ -128,6 +142,8 @@ The `Storage` component,
 Classes used by multiple components are in the `seedu.expense.commons` package.
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 ## **Implementation**
 
@@ -160,10 +176,15 @@ Step 2. The user executes `switch t/Food` command to switch to `ExpenseBook` wit
 and expenses in the expense book. The `switch` command calls `Model#switchCategory(Tag category)`. The method then
 calls the operations mentioned [above](#switchOperations) causing the category budgets and expenses to be filtered.
 
+<div style="page-break-after: always;"></div>
+
 The following sequence diagram shows how the switch operation works:
 
 ![SwitchSequenceDiagram](images/SwitchSequenceDiagram.png)
 ![SwitchSequenceDiagram2](images/SwitchSequenceDiagram2.png)
+
+<div style="page-break-after: always;"></div>
+
 ![SwitchSequenceDiagram3](images/SwitchSequenceDiagram3.png)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `SwitchCommand`
@@ -185,6 +206,8 @@ Step 5. The user then decides to execute the command `find`. Commands that do no
 have a clear relationship with the budget display such as `find`, will usually omit out the budget display after
 their execution. However, exceptions are given to command such as `help`, `exit` which will not alter the visibility
 of the current budget display.
+
+<div style="page-break-after: always;"></div>
 
 #### Design consideration:
 
@@ -213,6 +236,8 @@ The expense sorting command is facilitated by `UniqueExpenseList` and `ExpenseBo
 
 These operations are exposed in the `Model` interface as `Model#sortExpenseList(Comparator<Expense> comparator)`
 
+<div style="page-break-after: always;"></div>
+
 ##### `SortCommand` and `SortCommandParser`
 
 `SortCommand` will take in at least one, and up to three keywords which specify the order and the parameters to sort
@@ -240,6 +265,8 @@ Step 2. The user executes `sort by/date by/descriptionR` command to sort the `Ex
  The `sort` command calls `Model#sortExpenseList(Comparator<Expense> c)`, causing the `ExpenseBook` expenses to be
   sorted according to the comparator, and the `filteredExpenses` in `Model` to be modified since it is a listener.
 
+<div style="page-break-after: always;"></div>
+
 The following sequence diagrams shows how the sort command works:
 ![SortSequenceDiagram Pt1](images/SortSequenceDiagram1.png)
 
@@ -254,6 +281,7 @@ Step 3. The user then decides to execute the command `delete`. Commands that mod
 Step 4. The user then decides to execute the command `list`. This will revert the display view to initial
  `ExpenseBook`.
 
+<div style="page-break-after: always;"></div>
 
 #### Design consideration:
 
@@ -280,6 +308,8 @@ Sample usage: By default, the only command word for `FindCommand` is `"find"`
 
 To maintain some degree of simplicity and neatness, we require that `AliasCommand` and `ResetAliasCommand` cannot have aliases themselves. Furthermore, any custom alias is restricted to 10 case-sensitive alphabetical characters and each command can only have up to a single alias at any point in time. Default command words of each `Command` subclasses cannot be used as aliases.
 
+<div style="page-break-after: always;"></div>
+
 To allow for customisation to remain even after the user exits the app and subsequently restarts it, a customised alias-to-command mapping will be stored in JSON format, which can be converted to `AliasMap` and `AliasEntry` objects when Bamboo runs.
 
 The `ExpenseBookParser`'s `parseCommand()` method takes in an AliasMap object in addition to the user input, which allows the parser to map aliases to the default keyword and allows the execution of the associated `Command` object.
@@ -295,6 +325,8 @@ The following is a sequence diagram showing how it works:
 Step 3. The user can now use the following command to trigger a FindCommand.
 
 * `get -d lunch at macs`
+
+<div style="page-break-after: always;"></div>
 
 #### Design consideration:
 
@@ -318,6 +350,8 @@ The function of the default category is to subsume all "untagged" `expenses` und
 This is especially important for possible occasions such as when the User uses the application without any categories,
 or when the User deletes a category that existing `expenses` are linked to.
 
+<div style="page-break-after: always;"></div>
+
 #### Implementation
 
 The default category generally functions the same way as any user-created category, except that it cannot be deleted or
@@ -338,13 +372,19 @@ be tagged to it. When a category is created in the expense book, the correspondi
 with zero amount. Thereafter, the user can top-up (or reduce) each budget accordingly, and the balance after deducting
 all expenses within that category is shown to the user.
 
+<div style="page-break-after: always;"></div>
+
 ![AddingCategorizedExpenseActivityDiagram](images/CategoryBudgetActivityDiagram.png)
 
 The activity diagram above shows a possible flow of the user attempting to add an expense tagged to a specific category.
 
+<div style="page-break-after: always;"></div>
+
 ![ToppingUpCategoryBudgetActivityDiagram](images/CategoryBudgetActivityDiagram2.png)
 
 This second activity diagram shows a possible flow of the user trying to top-up the budget of a specific category.
+
+<div style="page-break-after: always;"></div>
 
 ### Graphical Representation Feature
 
@@ -361,6 +401,8 @@ The interactions between `ExpenseBook` (which contains the in-memory data of exp
 
 ![ClassDiagram](images/GraphicalRepresentationClassDiagram.png)
 
+<div style="page-break-after: always;"></div>
+
 The user initiates this function by executing the graph command. Refer Logic Component architecture diagram for the mechanism by which strings are read and parsed into Command objects.
 
 The sequence diagram below shows the proposed mechanism by which the required data necessary to initialise a pie chart is retrieved. This data is then used to format the UI output.
@@ -373,9 +415,13 @@ The sequence diagram below shows the proposed mechanism by which the required da
 
 A possible edge case would be the user having empty expense record prior to executing the graph command. In such a case, the program will display a default message.
 
+<div style="page-break-after: always;"></div>
+
 The following activity diagram summarizes what happens when a user enters a graph command:
 
 ![ActivityDiagram](images/GraphicalRepresentationActivityDiagram.png)
+
+<div style="page-break-after: always;"></div>
 
 #### Points to Note:
 
@@ -391,6 +437,8 @@ The following activity diagram summarizes what happens when a user enters a grap
   * Different sub-classes of `ChartData` can be implemented to collect a variety of meaningful data from `ExpenseBook` to be displayed by various UI classes in different formats.
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 ## **Documentation, logging, testing, configuration, dev-ops**
 
@@ -428,7 +476,7 @@ The following activity diagram summarizes what happens when a user enters a grap
 
 **Value proposition**: manage expenses faster and simpler than a typical mouse/GUI driven app
 
-
+<div style="page-break-after: always;"></div>
 
 ### User stories
 
@@ -456,6 +504,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *{More to be added}*
 
+<div style="page-break-after: always;"></div>
+
 ### Use cases
 
 (For all use cases below, the System is the Bamboo and the Actor is the user, unless specified otherwise)
@@ -482,6 +532,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
+<div style="page-break-after: always;"></div>
+
 #### Use case U2: Top-up budget
 
 **MSS**
@@ -503,6 +555,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 1b1. Bamboo shows an error message.
 
       Use case ends.
+
+<div style="page-break-after: always;"></div>
 
 #### Use case U3: Delete an expense
 
@@ -526,6 +580,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 3a1. Bamboo shows an error message.
 
       Use case resumes at step 2.
+
+<div style="page-break-after: always;"></div>
 
 #### Use case U4: Edit an expense
 
@@ -551,6 +607,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 3a1. Bamboo shows an error message.
 
       Use case ends.
+
+<div style="page-break-after: always;"></div>
 
 #### Use case U5: List all expenses
 
@@ -585,6 +643,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
+<div style="page-break-after: always;"></div>
+
 #### Use case U7: Find an expense
 
 **MSS**
@@ -616,6 +676,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 1a1. Bamboo shows an error message.
 
       Use case ends.
+
+<div style="page-break-after: always;"></div>
 
 #### Use case U9: Add category
 **MSS**
@@ -658,6 +720,8 @@ Similar to U9, except it's the opposite.
 
       Use case ends.
 
+<div style="page-break-after: always;"></div>
+
 #### Use case U11: Switch category
 **MSS**
 
@@ -697,6 +761,8 @@ Similar to U9, except it's the opposite.
     * 1b1. Bamboo shows an error message.
 
       Use case ends.
+
+<div style="page-break-after: always;"></div>
 
 #### Use case U13: Reset Changed Command Keyword
 **MSS**
@@ -742,6 +808,8 @@ Similar to U9, except it's the opposite.
 
       Use case resumes from 4.
 
+<div style="page-break-after: always;"></div>
+
 #### Use case U15: Graph Command Keyword
 **MSS**
 
@@ -772,6 +840,8 @@ Process Requirements:
 
 * Project is expected to adhere to the set Milestones.
 * User can execute actions using at most 1 command.
+
+<div style="page-break-after: always;"></div>
 
 ### Glossary
 
@@ -806,6 +876,8 @@ testers are expected to do more *exploratory* testing.
 
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
+
+<div style="page-break-after: always;"></div>
 
 ### Deleting an expense
 
